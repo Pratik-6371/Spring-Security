@@ -1,13 +1,29 @@
 package PratikAppSecurity.SpringSecurityProject.Controller;
 
+import PratikAppSecurity.SpringSecurityProject.Model.AccountTransactions;
+import PratikAppSecurity.SpringSecurityProject.Repository.AccountTransactionsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class BalanceController {
+    @Autowired
+    private AccountTransactionsRepository accountTransactionsRepository;
 
     @GetMapping("/myBalance")
-    public String getBalanceDetails(){
-        return "here are the balance details from db";
+    public List<AccountTransactions> getBalanceDetails(@RequestParam int id) {
+        List<AccountTransactions> accountTransactions = accountTransactionsRepository.
+                findByCustomerIdOrderByTransactionDtDesc(id);
+        if (accountTransactions != null) {
+            return accountTransactions;
+        } else {
+            return null;
+        }
     }
+
+
 }
